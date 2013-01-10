@@ -13,6 +13,7 @@
 .settings/
 collective.behavior.localdiazo.nja
 library-settings.txt
+Makefile.local
 local.cfg
 log.html
 output.xml

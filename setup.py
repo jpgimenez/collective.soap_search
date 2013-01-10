@@ -41,6 +41,8 @@ setup(name='collective.soap_search',
       install_requires=[
           'setuptools',
           # -*- Extra requirements: -*-
+          'z3c.soap',
+          'soaplib==0.8.2',
       ],
       extras_require={'test': ['plone.app.testing']},
       entry_points="""
