@@ -4,6 +4,7 @@
     xmlns:i18n="http://namespaces.zope.org/i18n"
     xmlns:genericsetup="http://namespaces.zope.org/genericsetup"
     xmlns:soap="http://namespaces.zope.org/soap"
+    xmlns:browser="http://namespaces.zope.org/browser"
     i18n_domain="collective.soap_search">
 
   <five:registerPackage package="." initialize=".initialize" />
@@ -17,11 +18,27 @@
       provides="Products.GenericSetup.interfaces.EXTENSION"
       />
 
+  <genericsetup:registerProfile
+      name="uninstall"
+      title="collective.soap_search uninstall"
+      directory="profiles/uninstall"
+      description=""
+      provides="Products.GenericSetup.interfaces.EXTENSION"
+      />
+
   <soap:view
       for="OFS.interfaces.IFolder"
       methods="results"
       class=".browser.Search"
       permission="zope2.Public"
+      />
+
+  <browser:page
+      name="collective.soap_search.settings"
+      for="*"
+      permission="cmf.ManagePortal"
+      layer=".interfaces.ICollectiveSoapSearchLayer"
+      class=".browser.SettingsEditFormView"
       />
 
 </configure>
