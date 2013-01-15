@@ -2,9 +2,14 @@
 from DateTime import DateTime
 
 try:
-    from plone.app.search.browser import Search as BaseSearch
+    from plone.app.search import browser
+    BaseSearch = browser.Search
+    quote_chars = browser.quote_chars
+    EVER = browser.EVER
 except:
     from collective.soap_search.backward_search import Search as BaseSearch
+    from collective.soap_search.backward_search import quote_chars
+    from collective.soap_search.backward_search import EVER
 
 from soaplib.service import SoapServiceBase
 
@@ -45,7 +50,7 @@ class Search(BaseSearch, SoapServiceBase):
         b_start = params.get('b_start', 0)
         date_keys = ('start', 'end')
         for k in date_keys:
-            if query.has_key(k):
+            if k in query:
                 v = query.get(k)
                 if v and isinstance(v, dict):
                     dt_str = "%s/%s/%s %s:%s:%s" % (v['query'][0],
@@ -146,4 +151,3 @@ class SettingsEditForm(RegistryEditForm):
 
 
 SettingsEditFormView = layout.wrap_form(SettingsEditForm, ControlPanelFormWrapper)
->>>>>>> 2dba3c3eebac239848c88b5d50414babf52aa528
