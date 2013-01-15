@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from DateTime import DateTime
 
 try:
     from plone.app.search.browser import Search as BaseSearch
@@ -27,7 +28,26 @@ class Search(BaseSearch, SoapServiceBase):
         batch = params.get('batch', True)
         b_size = params.get('b_size', 10)
         b_start = params.get('b_start', 0)
-        import ipdb;ipdb.set_trace()
+        date_keys = ('start', 'end')
+        for k in date_keys:
+            if query.has_key(k):
+                v = query.get(k)
+                if v and isinstance(v, dict):
+                    dt_str = "%s/%s/%s %s:%s:%s" % (v['query'][0],
+                                                    v['query'][1],
+                                                    v['query'][2],
+                                                    v['query'][3],
+                                                    v['query'][4],
+                                                    v['query'][5])
+                    v['query'] = DateTime(dt_str)
+                else:
+                    dt_str = "%s/%s/%s %s:%s:%s" % (v[0],
+                                                    v[1],
+                                                    v[2],
+                                                    v[3],
+                                                    v[4],
+                                                    v[5])
+                    v = DateTime(dt_str)
         results = super(Search, self).results(query, batch, b_size, b_start)
         return [{'id': i.id,
                  'title': i.Title} for i in results]
