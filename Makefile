@@ -11,37 +11,15 @@ SHELL = /bin/sh
 
 options = -N -q -t 3
 src = src/collective/soap_search
-minimum_coverage = 80
+minimum_coverage = 70
 pep8_ignores = E501
-max_complexity = 12
+max_complexity = 14
 css_ignores = ! -name jquery\*
 js_ignores = ! -name jquery\*
-
-ack-install:
-	sudo apt-get install ack-grep
-
-nodejs-install:
-	sudo apt-add-repository ppa:chris-lea/node.js -y
-	sudo apt-get update 1>/dev/null
-	sudo apt-get install nodejs npm -y
-
-csslint-install: nodejs-install
-	npm install csslint -g
-
-jshint-install: nodejs-install
-	npm install jshint -g
 
 python-validation:
 	@echo Validating Python files
 	bin/flake8 --ignore=$(pep8_ignores) --max-complexity=$(max_complexity) $(src)
-
-css-validation: ack-install csslint-install
-	@echo Validating CSS files
-	find $(src) -type f -name *.css $(css_ignores) | xargs csslint | ack-grep --passthru error
-
-js-validation: ack-install jshint-install
-	@echo Validating JavaScript files
-	find $(src) -type f -name *.js $(js_ignores) -exec jshint {} ';' | ack-grep --passthru error
 
 quality-assurance: python-validation
 	@echo Quality assurance

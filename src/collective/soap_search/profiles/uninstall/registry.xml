@@ -1,0 +1,5 @@
+<?xml version="1.0"?>
+<registry>
+  <record name="collective.soap_search.interfaces.ISettings.max_batch_size" 
+          delete="true" />
+</registry>
