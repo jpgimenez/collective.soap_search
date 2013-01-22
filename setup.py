@@ -42,7 +42,7 @@ setup(name='collective.soap_search',
           'setuptools',
           'Products.CMFPlone',
           'z3c.soap',
-          'soaplib==0.8.2',
+          'soaplib',
       ],
       extras_require={'test': ['plone.app.testing', 'SOAPpy']},
       entry_points="""

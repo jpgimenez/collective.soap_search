@@ -11,7 +11,8 @@ except:
     from collective.soap_search.backward_search import quote_chars
     from collective.soap_search.backward_search import EVER
 
-from soaplib.service import SoapServiceBase
+from soaplib.service import SoapServiceBase, soapmethod
+from soaplib.serializers.primitive import String, Array, Any
 
 from plone.z3cform import layout
 from plone.app.registry.browser.controlpanel import RegistryEditForm
@@ -32,10 +33,11 @@ class Search(BaseSearch, SoapServiceBase):
 
     def wsdl(self):
         res = self.request.RESPONSE
-        res.setHeader('Content-Type, text/xml; charset="utf-8"')
+        res.setHeader('Content-Type', 'text/xml; charset="utf-8"')
         return SoapServiceBase.wsdl(self, self.context.absolute_url())
 
-    def results(self, params):
+    @soapmethod(Array(Any), Array(String), _returns=Array(Array(String)))
+    def results(self, params, metadata):
         """ Get properly wrapped search results from the catalog.
         Everything in Plone that performs searches should go through this view.
         'query' should be a dictionary of catalog parameters.
@@ -87,6 +89,8 @@ class Search(BaseSearch, SoapServiceBase):
         if batch:
             brains = Batch(brains, b_size, b_start)
         schema = catalog.schema()
+        if metadata:
+            schema = set(schema).intersection(metadata)
         results = []
         for brain in brains:
             entry = dict()
@@ -96,6 +100,7 @@ class Search(BaseSearch, SoapServiceBase):
                     entry[k] = entry[k].parts()
                 if isinstance(entry[k], unicode):
                     entry[k] = entry[k].encode()
+            entry['url'] = brain.getURL()
             results.append(entry)
         return results
 

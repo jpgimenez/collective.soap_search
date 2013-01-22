@@ -26,6 +26,14 @@
       provides="Products.GenericSetup.interfaces.EXTENSION"
       />
 
+  <browser:page
+      for="OFS.interfaces.IFolder"
+      name="wsdl"
+      class=".browser.Search"
+      attribute="wsdl"
+	  permission="zope2.View"
+  	  />
+
   <soap:view
       for="OFS.interfaces.IFolder"
       methods="results"
